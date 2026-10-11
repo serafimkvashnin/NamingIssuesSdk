@@ -1,0 +1,22 @@
+{
+  "name": "@naming-issues/sdk",
+  "version": "0.1.0",
+  "description": "SDK for Naming Issues games: runs a game inside the hub Mini App or standalone in Telegram",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    "./host": { "types": "./dist/host.d.ts", "default": "./dist/host.js" }
+  },
+  "files": ["dist"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "node build.mjs && tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "typescript": "^7.0.2"
+  }
+}
