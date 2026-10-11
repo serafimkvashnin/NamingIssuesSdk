@@ -5,7 +5,7 @@ import {
   isMessage,
   loadTelegram,
   versionAtLeast
-} from "./chunk-GY2NU2NZ.js";
+} from "./chunk-O7ES7TMT.js";
 
 // src/game.ts
 var session;
@@ -162,12 +162,17 @@ function shareInvite(options = {}) {
   if ((session == null ? void 0 : session.mode) !== "hub") return Promise.resolve(false);
   return call("shareInvite", options);
 }
+function getToken() {
+  if ((session == null ? void 0 : session.mode) !== "hub") return Promise.resolve("");
+  return call("getToken");
+}
 function supports(version) {
   return !!session && versionAtLeast(session.version, version);
 }
 export {
   exit,
   getSession,
+  getToken,
   haptic,
   init,
   isInHub,

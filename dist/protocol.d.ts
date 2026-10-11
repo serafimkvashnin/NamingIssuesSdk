@@ -78,6 +78,8 @@ export interface HostMethods {
     shareMessage(preparedMessageId: string): boolean;
     /** Карточка-приглашение в игру: её готовит бот, игроку открывается окно «Поделиться». true — отправлено */
     shareInvite(options: InviteOptions): boolean;
+    /** Свежий пропуск игрока (session.token живёт 24 часа) */
+    getToken(): string;
 }
 /** События, которые хаб присылает игре */
 export interface GameEvents {

@@ -36,6 +36,11 @@ export declare function shareMessage(preparedMessageId: string): Promise<boolean
  * игроку открывается окно выбора чата. Работает только в хабе: true — отправлено.
  */
 export declare function shareInvite(options?: InviteOptions): Promise<boolean>;
+/**
+ * Свежий пропуск игрока для сервера игры. session.token живёт 24 часа — для переподключений
+ * лучше брать пропуск отсюда (например, в accessTokenFactory у SignalR). Вне хаба — пустая строка.
+ */
+export declare function getToken(): Promise<string>;
 /** Поддерживает ли клиент Telegram нужную версию Bot API, например supports('8.0') */
 export declare function supports(version: string): boolean;
 export {};

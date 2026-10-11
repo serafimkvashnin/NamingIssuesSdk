@@ -12,7 +12,7 @@ SDK для игр Naming Issues. С ним одна и та же сборка и
 npm (React, Phaser с бандлером):
 
 ```
-npm install https://github.com/serafimkvashnin/NamingIssuesSdk/archive/refs/tags/v0.3.0.tar.gz
+npm install https://github.com/serafimkvashnin/NamingIssuesSdk/archive/refs/tags/v0.4.0.tar.gz
 ```
 
 ```ts
@@ -39,6 +39,7 @@ NI.ready()                        // игра готова (в обычном Te
 | `setColors({ header, background, bottomBar })` | цвета шапки и фона Telegram |
 | `haptic.impact(style)`, `haptic.notification(type)`, `haptic.selection()` | вибрация |
 | `openLink(url)`, `openTelegramLink(url)` | ссылки |
+| `getToken(): Promise<string>` | свежий пропуск игрока для сервера игры (берите его при каждом подключении к серверу) |
 | `shareInvite({ startParam, text }): Promise<boolean>` | пригласить в игру: бот готовит карточку игры с кнопкой, открывается окно «Поделиться». Только в хабе |
 | `shareMessage(id): Promise<boolean>` | окно «Поделиться» для сообщения, подготовленного ботом |
 | `supports('8.0')` | поддерживает ли клиент нужную версию Bot API |
@@ -52,6 +53,7 @@ NI.ready()                        // игра готова (в обычном Te
 - Публичный ключ (JWKS): `https://hub.naming-issues.workers.dev/api/jwks`.
 - Проверить: подпись, `iss` = `naming-issues-hub`, `aud` = id твоей игры, `exp` не истёк.
 - Внутри: `sub` (Telegram id, строкой), `name`, `username` (если есть), `lang`, `iat`, `exp`. Действует 24 часа.
+- Пропуск проверяется при подключении к серверу. Для переподключений берите свежий через `NI.getToken()`, тогда истечение срока посреди игры ничего не сломает.
 
 Node (`npm install jose`):
 

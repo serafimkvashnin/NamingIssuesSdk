@@ -208,6 +208,15 @@ export function shareInvite(options: InviteOptions = {}): Promise<boolean> {
   return call('shareInvite', options)
 }
 
+/**
+ * Свежий пропуск игрока для сервера игры. session.token живёт 24 часа — для переподключений
+ * лучше брать пропуск отсюда (например, в accessTokenFactory у SignalR). Вне хаба — пустая строка.
+ */
+export function getToken(): Promise<string> {
+  if (session?.mode !== 'hub') return Promise.resolve('')
+  return call('getToken')
+}
+
 /** Поддерживает ли клиент Telegram нужную версию Bot API, например supports('8.0') */
 export function supports(version: string): boolean {
   return !!session && versionAtLeast(session.version, version)

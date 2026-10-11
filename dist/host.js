@@ -2,7 +2,7 @@ import {
   PROTOCOL_VERSION,
   getTelegram,
   isMessage
-} from "./chunk-GY2NU2NZ.js";
+} from "./chunk-O7ES7TMT.js";
 
 // src/host.ts
 var ZERO = { top: 0, bottom: 0, left: 0, right: 0 };
@@ -79,6 +79,9 @@ function createHost({ iframe, startParam, onReady, onExit, getToken, shareInvite
     },
     shareInvite(options) {
       return shareInvite ? shareInvite(options) : false;
+    },
+    async getToken() {
+      return getToken ? await getToken() : "";
     }
   };
   async function onMessage(e) {

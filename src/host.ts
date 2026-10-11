@@ -96,6 +96,9 @@ export function createHost({ iframe, startParam, onReady, onExit, getToken, shar
     shareInvite(options) {
       return shareInvite ? shareInvite(options) : false
     },
+    async getToken() {
+      return getToken ? await getToken() : ''
+    },
   }
 
   async function onMessage(e: MessageEvent) {

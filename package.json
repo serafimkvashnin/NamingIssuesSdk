@@ -1,6 +1,6 @@
 {
   "name": "@naming-issues/sdk",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "SDK for Naming Issues games: runs a game inside the hub Mini App or standalone in Telegram",
   "type": "module",
   "main": "./dist/index.js",
