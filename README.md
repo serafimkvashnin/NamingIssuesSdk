@@ -12,14 +12,14 @@ SDK для игр Naming Issues. С ним одна и та же сборка и
 npm (React, Phaser с бандлером):
 
 ```
-npm install https://github.com/serafimkvashnin/NamingIssuesSdk/archive/refs/tags/v0.2.0.tar.gz
+npm install https://github.com/serafimkvashnin/NamingIssuesSdk/archive/refs/tags/v0.3.0.tar.gz
 ```
 
 ```ts
 import * as NI from '@naming-issues/sdk'
 
 const session = await NI.init()   // до первых запросов к серверу игры
-// session.initData — передать серверу игры для проверки игрока
+// session.token — передать серверу игры: по нему он узнаёт игрока (см. «Проверка игрока на сервере»)
 // session.language, session.user, session.startParam
 render()
 NI.ready()                        // игра готова (в обычном Telegram — сигнал клиенту)
@@ -45,9 +45,29 @@ NI.ready()                        // игра готова (в обычном Te
 
 Безопасные зоны выставляются теми же CSS-переменными, что и в Telegram (`--tg-safe-area-inset-*`, `--tg-content-safe-area-inset-*`), в обоих режимах.
 
+## Проверка игрока на сервере
+
+В хабе игра получает `session.token`: это JWT (ES256), подписанный хабом. `initData` Telegram игре не передаётся. Токен бота серверу игры не нужен.
+
+- Публичный ключ (JWKS): `https://hub.naming-issues.workers.dev/api/jwks`.
+- Проверить: подпись, `iss` = `naming-issues-hub`, `aud` = id твоей игры, `exp` не истёк.
+- Внутри: `sub` (Telegram id, строкой), `name`, `username` (если есть), `lang`, `iat`, `exp`. Действует 24 часа.
+
+Node (`npm install jose`):
+
+```ts
+import { createRemoteJWKSet, jwtVerify } from 'jose'
+
+const jwks = createRemoteJWKSet(new URL('https://hub.naming-issues.workers.dev/api/jwks'))
+const { payload } = await jwtVerify(token, jwks, { issuer: 'naming-issues-hub', audience: 'my-game' })
+const userId = Number(payload.sub)
+```
+
+В C# — `ECDsa` с ключом из JWKS (`x`, `y`) и `VerifyData` по `header.payload`. Пример есть на сервере крестиков-ноликов: `HubTokenValidator.cs`.
+
 ## Для хаба
 
-`@naming-issues/sdk/host`: `createHost({ iframe, startParam, onReady, onExit, shareInvite })` принимает вызовы игры из iframe и выполняет их через `Telegram.WebApp`. Хаб добавляет к адресу игры параметр `?niHost=1`: по нему игра понимает, что запущена внутри хаба.
+`@naming-issues/sdk/host`: `createHost({ iframe, startParam, onReady, onExit, getToken, shareInvite })` принимает вызовы игры из iframe и выполняет их через `Telegram.WebApp`. Хаб добавляет к адресу игры параметр `?niHost=1`: по нему игра понимает, что запущена внутри хаба.
 
 ## Разработка
 

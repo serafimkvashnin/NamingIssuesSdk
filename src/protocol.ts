@@ -33,7 +33,13 @@ export interface TelegramUser {
 export interface Session {
   /** hub — игра открыта в хабе; standalone — напрямую как Mini App */
   mode: 'hub' | 'standalone'
-  /** Подписанная строка Telegram: сервер игры проверяет её токеном бота или по signature */
+  /**
+   * Пропуск игрока, подписанный хабом (JWT ES256): id, имя, @username, язык, id игры, срок действия.
+   * Сервер игры проверяет подпись публичным ключом хаба (https://hub.naming-issues.workers.dev/api/jwks)
+   * и что aud — id его игры. Есть только в хабе.
+   */
+  token?: string
+  /** Подписанная строка Telegram — только вне хаба (игра открыта напрямую как Mini App). В хабе пустая */
   initData: string
   user?: TelegramUser
   /** Язык Telegram-клиента игрока, например 'ru' */

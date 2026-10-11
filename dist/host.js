@@ -2,7 +2,7 @@ import {
   PROTOCOL_VERSION,
   getTelegram,
   isMessage
-} from "./chunk-G5DTPCZ6.js";
+} from "./chunk-GY2NU2NZ.js";
 
 // src/host.ts
 var ZERO = { top: 0, bottom: 0, left: 0, right: 0 };
@@ -10,7 +10,7 @@ function safeAreasOf(tg) {
   var _a, _b;
   return { safe: (_a = tg == null ? void 0 : tg.safeAreaInset) != null ? _a : ZERO, content: (_b = tg == null ? void 0 : tg.contentSafeAreaInset) != null ? _b : ZERO };
 }
-function createHost({ iframe, startParam, onReady, onExit, shareInvite }) {
+function createHost({ iframe, startParam, onReady, onExit, getToken, shareInvite }) {
   const tg = getTelegram();
   const origin = new URL(iframe.src, location.href).origin;
   let gameHandlesBack = false;
@@ -20,18 +20,20 @@ function createHost({ iframe, startParam, onReady, onExit, shareInvite }) {
   };
   const emit = (name, data) => post({ __ni: 1, type: "event", name, data });
   const methods = {
-    init(protocol) {
-      var _a, _b, _c, _d, _e, _f, _g;
+    async init(protocol) {
+      var _a, _b, _c, _d, _e, _f;
       if (protocol > PROTOCOL_VERSION) console.warn(`[NI host] game speaks protocol ${protocol}, host ${PROTOCOL_VERSION}`);
       const user = (_a = tg == null ? void 0 : tg.initDataUnsafe) == null ? void 0 : _a.user;
       const session = {
         mode: "hub",
-        initData: (_b = tg == null ? void 0 : tg.initData) != null ? _b : "",
+        // initData хаба игре не отдаём: с ней можно действовать в хабе от имени игрока
+        token: getToken ? await getToken() : void 0,
+        initData: "",
         user,
-        language: (_e = (_d = user == null ? void 0 : user.language_code) != null ? _d : (_c = navigator.language) == null ? void 0 : _c.slice(0, 2)) != null ? _e : "en",
+        language: (_d = (_c = user == null ? void 0 : user.language_code) != null ? _c : (_b = navigator.language) == null ? void 0 : _b.slice(0, 2)) != null ? _d : "en",
         startParam,
-        version: (_f = tg == null ? void 0 : tg.version) != null ? _f : "6.0",
-        platform: (_g = tg == null ? void 0 : tg.platform) != null ? _g : "unknown",
+        version: (_e = tg == null ? void 0 : tg.version) != null ? _e : "6.0",
+        platform: (_f = tg == null ? void 0 : tg.platform) != null ? _f : "unknown",
         safeAreas: safeAreasOf(tg)
       };
       return session;

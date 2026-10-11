@@ -5,7 +5,7 @@ import {
   isMessage,
   loadTelegram,
   versionAtLeast
-} from "./chunk-G5DTPCZ6.js";
+} from "./chunk-GY2NU2NZ.js";
 
 // src/game.ts
 var session;

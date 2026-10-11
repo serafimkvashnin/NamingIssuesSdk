@@ -11,6 +11,8 @@ export interface HostOptions {
   onReady?: () => void
   /** Игра вызвала exit() или игрок нажал «Назад», а игра его не перехватывает */
   onExit?: () => void
+  /** Пропуск игрока для этой игры (JWT, подписанный хабом) — уходит игре вместо initData */
+  getToken?: () => Promise<string>
   /** Приглашение в игру (NI.shareInvite): хаб готовит карточку через бота и показывает «Поделиться» */
   shareInvite?: (options: InviteOptions) => Promise<boolean>
 }
@@ -26,7 +28,7 @@ function safeAreasOf(tg: TelegramWebApp | undefined): SafeAreas {
   return { safe: tg?.safeAreaInset ?? ZERO, content: tg?.contentSafeAreaInset ?? ZERO }
 }
 
-export function createHost({ iframe, startParam, onReady, onExit, shareInvite }: HostOptions): Host {
+export function createHost({ iframe, startParam, onReady, onExit, getToken, shareInvite }: HostOptions): Host {
   const tg = getTelegram()
   const origin = new URL(iframe.src, location.href).origin
   let gameHandlesBack = false
@@ -35,12 +37,14 @@ export function createHost({ iframe, startParam, onReady, onExit, shareInvite }:
   const emit = <K extends keyof GameEvents>(name: K, data?: GameEvents[K]) => post({ __ni: 1, type: 'event', name, data })
 
   const methods: { [K in keyof HostMethods]: (...args: Parameters<HostMethods[K]>) => ReturnType<HostMethods[K]> | Promise<ReturnType<HostMethods[K]>> } = {
-    init(protocol) {
+    async init(protocol) {
       if (protocol > PROTOCOL_VERSION) console.warn(`[NI host] game speaks protocol ${protocol}, host ${PROTOCOL_VERSION}`)
       const user = tg?.initDataUnsafe?.user
       const session: Session = {
         mode: 'hub',
-        initData: tg?.initData ?? '',
+        // initData хаба игре не отдаём: с ней можно действовать в хабе от имени игрока
+        token: getToken ? await getToken() : undefined,
+        initData: '',
         user,
         language: user?.language_code ?? navigator.language?.slice(0, 2) ?? 'en',
         startParam,
