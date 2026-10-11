@@ -1,6 +1,6 @@
 // Сторона хаба: принимает вызовы игры из iframe и выполняет их через Telegram.WebApp.
 
-import { PROTOCOL_VERSION, isMessage, type GameEvents, type HostMethods, type Message, type SafeAreas, type Session } from './protocol'
+import { PROTOCOL_VERSION, isMessage, type GameEvents, type HostMethods, type InviteOptions, type Message, type SafeAreas, type Session } from './protocol'
 import { getTelegram, type TelegramWebApp } from './telegram'
 
 export interface HostOptions {
@@ -11,6 +11,8 @@ export interface HostOptions {
   onReady?: () => void
   /** Игра вызвала exit() или игрок нажал «Назад», а игра его не перехватывает */
   onExit?: () => void
+  /** Приглашение в игру (NI.shareInvite): хаб готовит карточку через бота и показывает «Поделиться» */
+  shareInvite?: (options: InviteOptions) => Promise<boolean>
 }
 
 export interface Host {
@@ -24,7 +26,7 @@ function safeAreasOf(tg: TelegramWebApp | undefined): SafeAreas {
   return { safe: tg?.safeAreaInset ?? ZERO, content: tg?.contentSafeAreaInset ?? ZERO }
 }
 
-export function createHost({ iframe, startParam, onReady, onExit }: HostOptions): Host {
+export function createHost({ iframe, startParam, onReady, onExit, shareInvite }: HostOptions): Host {
   const tg = getTelegram()
   const origin = new URL(iframe.src, location.href).origin
   let gameHandlesBack = false
@@ -86,6 +88,9 @@ export function createHost({ iframe, startParam, onReady, onExit }: HostOptions)
         if (!tg?.shareMessage) return resolve(false)
         tg.shareMessage(id, (sent) => resolve(!!sent))
       })
+    },
+    shareInvite(options) {
+      return shareInvite ? shareInvite(options) : false
     },
   }
 

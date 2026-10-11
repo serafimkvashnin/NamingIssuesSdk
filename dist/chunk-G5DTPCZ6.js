@@ -42,4 +42,4 @@ export {
   getTelegram,
   loadTelegram
 };
-//# sourceMappingURL=chunk-DS6O3H5A.js.map
+//# sourceMappingURL=chunk-G5DTPCZ6.js.map

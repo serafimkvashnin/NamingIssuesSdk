@@ -12,7 +12,7 @@ SDK для игр Naming Issues. С ним одна и та же сборка и
 npm (React, Phaser с бандлером):
 
 ```
-npm install https://github.com/serafimkvashnin/NamingIssuesSdk/archive/refs/tags/v0.1.0.tar.gz
+npm install https://github.com/serafimkvashnin/NamingIssuesSdk/archive/refs/tags/v0.2.0.tar.gz
 ```
 
 ```ts
@@ -39,6 +39,7 @@ NI.ready()                        // игра готова, хаб убирае�
 | `setColors({ header, background, bottomBar })` | цвета шапки и фона Telegram |
 | `haptic.impact(style)`, `haptic.notification(type)`, `haptic.selection()` | вибрация |
 | `openLink(url)`, `openTelegramLink(url)` | ссылки |
+| `shareInvite({ startParam, text }): Promise<boolean>` | пригласить в игру: бот готовит карточку игры с кнопкой, открывается окно «Поделиться». Только в хабе |
 | `shareMessage(id): Promise<boolean>` | окно «Поделиться» для сообщения, подготовленного ботом |
 | `supports('8.0')` | поддерживает ли клиент нужную версию Bot API |
 
@@ -46,7 +47,7 @@ NI.ready()                        // игра готова, хаб убирае�
 
 ## Для хаба
 
-`@naming-issues/sdk/host`: `createHost({ iframe, startParam, onReady, onExit })` принимает вызовы игры из iframe и выполняет их через `Telegram.WebApp`. Хаб добавляет к адресу игры параметр `?niHost=1`: по нему игра понимает, что запущена внутри хаба.
+`@naming-issues/sdk/host`: `createHost({ iframe, startParam, onReady, onExit, shareInvite })` принимает вызовы игры из iframe и выполняет их через `Telegram.WebApp`. Хаб добавляет к адресу игры параметр `?niHost=1`: по нему игра понимает, что запущена внутри хаба.
 
 ## Разработка
 

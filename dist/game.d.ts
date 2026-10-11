@@ -1,4 +1,4 @@
-import { type Colors, type Session } from './protocol';
+import { type Colors, type InviteOptions, type Session } from './protocol';
 type Handler = () => void;
 export declare function isInHub(): boolean;
 /**
@@ -31,6 +31,11 @@ export declare function openLink(url: string): void;
 export declare function openTelegramLink(url: string): void;
 /** Окно «Поделиться» для сообщения, подготовленного ботом (Bot API 8.0+). true — отправлено */
 export declare function shareMessage(preparedMessageId: string): Promise<boolean>;
+/**
+ * Пригласить в игру: бот готовит карточку (название, анимация, кнопка с параметром запуска),
+ * игроку открывается окно выбора чата. Работает только в хабе: true — отправлено.
+ */
+export declare function shareInvite(options?: InviteOptions): Promise<boolean>;
 /** Поддерживает ли клиент Telegram нужную версию Bot API, например supports('8.0') */
 export declare function supports(version: string): boolean;
 export {};

@@ -2,7 +2,7 @@ import {
   PROTOCOL_VERSION,
   getTelegram,
   isMessage
-} from "./chunk-DS6O3H5A.js";
+} from "./chunk-G5DTPCZ6.js";
 
 // src/host.ts
 var ZERO = { top: 0, bottom: 0, left: 0, right: 0 };
@@ -10,7 +10,7 @@ function safeAreasOf(tg) {
   var _a, _b;
   return { safe: (_a = tg == null ? void 0 : tg.safeAreaInset) != null ? _a : ZERO, content: (_b = tg == null ? void 0 : tg.contentSafeAreaInset) != null ? _b : ZERO };
 }
-function createHost({ iframe, startParam, onReady, onExit }) {
+function createHost({ iframe, startParam, onReady, onExit, shareInvite }) {
   const tg = getTelegram();
   const origin = new URL(iframe.src, location.href).origin;
   let gameHandlesBack = false;
@@ -74,6 +74,9 @@ function createHost({ iframe, startParam, onReady, onExit }) {
         if (!(tg == null ? void 0 : tg.shareMessage)) return resolve(false);
         tg.shareMessage(id, (sent) => resolve(!!sent));
       });
+    },
+    shareInvite(options) {
+      return shareInvite ? shareInvite(options) : false;
     }
   };
   async function onMessage(e) {

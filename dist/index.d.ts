@@ -1,2 +1,2 @@
 export * from './game';
-export type { Colors, Insets, SafeAreas, Session, TelegramUser } from './protocol';
+export type { Colors, Insets, InviteOptions, SafeAreas, Session, TelegramUser } from './protocol';

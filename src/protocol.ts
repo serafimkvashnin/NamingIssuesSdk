@@ -51,6 +51,13 @@ export type HapticCall =
   | { kind: 'notification'; type: 'error' | 'success' | 'warning' }
   | { kind: 'selection' }
 
+export interface InviteOptions {
+  /** Параметр запуска для приглашённого, например код комнаты; без него — просто ссылка на игру */
+  startParam?: string
+  /** Строка под подписью карточки на языке игрока, например «Заходи ко мне в комнату K7MPQ» */
+  text?: string
+}
+
 export interface Colors {
   header?: string
   background?: string
@@ -70,6 +77,8 @@ export interface HostMethods {
   openTelegramLink(url: string): void
   /** Окно «Поделиться» для сообщения, подготовленного ботом. true — отправлено */
   shareMessage(preparedMessageId: string): boolean
+  /** Карточка-приглашение в игру: её готовит бот, игроку открывается окно «Поделиться». true — отправлено */
+  shareInvite(options: InviteOptions): boolean
 }
 
 /** События, которые хаб присылает игре */

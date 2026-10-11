@@ -5,7 +5,7 @@ import {
   isMessage,
   loadTelegram,
   versionAtLeast
-} from "./chunk-DS6O3H5A.js";
+} from "./chunk-G5DTPCZ6.js";
 
 // src/game.ts
 var session;
@@ -158,6 +158,10 @@ function shareMessage(preparedMessageId) {
     tg.shareMessage(preparedMessageId, (sent) => resolve(!!sent));
   });
 }
+function shareInvite(options = {}) {
+  if ((session == null ? void 0 : session.mode) !== "hub") return Promise.resolve(false);
+  return call("shareInvite", options);
+}
 function supports(version) {
   return !!session && versionAtLeast(session.version, version);
 }
@@ -172,6 +176,7 @@ export {
   openTelegramLink,
   ready,
   setColors,
+  shareInvite,
   shareMessage,
   supports
 };

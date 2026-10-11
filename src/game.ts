@@ -4,7 +4,7 @@
 
 import {
   HOST_QUERY_PARAM, PROTOCOL_VERSION, isMessage, versionAtLeast,
-  type Colors, type GameEvents, type HapticCall, type HostMethods, type Message, type SafeAreas, type Session,
+  type Colors, type GameEvents, type HapticCall, type HostMethods, type InviteOptions, type Message, type SafeAreas, type Session,
 } from './protocol'
 import { getTelegram, loadTelegram, type TelegramWebApp } from './telegram'
 
@@ -197,6 +197,15 @@ export function shareMessage(preparedMessageId: string): Promise<boolean> {
     if (!tg?.shareMessage) return resolve(false)
     tg.shareMessage(preparedMessageId, (sent) => resolve(!!sent))
   })
+}
+
+/**
+ * Пригласить в игру: бот готовит карточку (название, анимация, кнопка с параметром запуска),
+ * игроку открывается окно выбора чата. Работает только в хабе: true — отправлено.
+ */
+export function shareInvite(options: InviteOptions = {}): Promise<boolean> {
+  if (session?.mode !== 'hub') return Promise.resolve(false)
+  return call('shareInvite', options)
 }
 
 /** Поддерживает ли клиент Telegram нужную версию Bot API, например supports('8.0') */
