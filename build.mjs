@@ -1,5 +1,9 @@
 // ESM-модули для npm и одна IIFE-сборка для подключения через <script>
+import { rmSync } from 'node:fs'
 import { build } from 'esbuild'
+
+// Чистим dist: иначе остаются чанки прошлых сборок с другими хешами
+rmSync('dist', { recursive: true, force: true })
 
 const common = { bundle: true, target: 'es2019', sourcemap: true, logLevel: 'info' }
 
